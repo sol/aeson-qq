@@ -1,0 +1,8 @@
+IDE.session
+dist
+*.swp
+*.hi
+.DS_Store
+*.o
+*.manifest
+*.exe
