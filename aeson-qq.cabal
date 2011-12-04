@@ -1,5 +1,5 @@
 name:                aeson-qq
-version:             0.4.0
+version:             0.4.1
 synopsis:            Json Quasiquatation for Haskell.
 
 -- A longer description of the package.
@@ -25,7 +25,7 @@ cabal-version:       >=1.6
 library
   hs-source-dirs: src
   exposed-modules: Data.Aeson.QQ
-  build-depends: base >= 4.3 && < 5, aeson, parsec >= 2 && < 3, json-qq, template-haskell, haskell-src-meta >= 0.1.0
+  build-depends: base >= 4.3 && < 5, aeson, parsec >= 2, json-qq == 0.4.1, template-haskell, haskell-src-meta >= 0.1.0
 
 source-repository head
   type:     git
