@@ -49,7 +49,7 @@ import Language.Haskell.TH.Quote
 import Data.Data
 import Data.Maybe
 
-import JSON.QQ as QQ
+import Data.JSON.QQ as QQ
 
 import Data.Aeson as A
 import Data.Aeson.Generic
