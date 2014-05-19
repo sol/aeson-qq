@@ -1,4 +1,6 @@
 {-# LANGUAGE TemplateHaskell, QuasiQuotes, DeriveGeneric #-}
+{-# OPTIONS_GHC -fno-warn-missing-signatures #-}
+{-# OPTIONS_GHC -fno-warn-type-defaults #-}
 module Main where
 
 import Data.Aeson as A
@@ -9,18 +11,12 @@ import Data.Aeson.Types
 import Test.Framework.TH
 import Test.Framework.Providers.HUnit
 import Test.HUnit
-import Test.Framework.Providers.QuickCheck2
-import Test.Framework (defaultMain)
 
-import Data.Ratio
 import Data.Vector
 import Data.Text
-import Data.Attoparsec
-import Data.Attoparsec.Number
 
 import Data.Char
 
-import Language.Haskell.TH
 import Data.Scientific
 
 import GHC.Generics
@@ -63,7 +59,6 @@ case_foo = do
 case_quoted_name = do
   let actual = [aesonQQ| {"foo": "bar"} |]
       expected = object [(pack "foo", string' "bar")]
-      foo = "zoo"
   expected @=? actual
 
 case_var_name = do

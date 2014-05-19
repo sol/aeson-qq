@@ -44,27 +44,16 @@ module Data.Aeson.QQ (
 import Language.Haskell.TH
 import Language.Haskell.TH.Quote
 
-import Data.Data
-import Data.Maybe
 import Control.Applicative
 
 import Data.JSON.QQ as QQ
 
-import Data.Aeson as A
-
-import Data.Ratio
-import Text.ParserCombinators.Parsec
-import Text.ParserCombinators.Parsec.Error
-
-import Language.Haskell.Meta.Parse
-import Data.Scientific
-
 aesonQQ :: QuasiQuoter
 aesonQQ = QuasiQuoter {
   quoteExp = jsonExp,
-  quotePat = \s -> error "No quotePat defined for jsonQQ",
-  quoteType = \s -> error "No quoteType defined for jsonQQ",
-  quoteDec = \s -> error "No quoteDec defined for jsonQQ"
+  quotePat = const $ error "No quotePat defined for jsonQQ",
+  quoteType = const $ error "No quoteType defined for jsonQQ",
+  quoteDec = const $ error "No quoteDec defined for jsonQQ"
 }
 
 
@@ -101,7 +90,7 @@ toExp (JsonObject objs) =
 toExp (JsonArray arr) =
     AppE (ConE $ mkName "Data.Aeson.Types.Array") . AppE (VarE $ mkName "Data.Vector.fromList") . ListE <$> mapM toExp arr
 
-toExp (JsonNumber b rat) = return $
+toExp (JsonNumber _ rat) = return $
     AppE (ConE $ mkName "Data.Aeson.Types.Number") (AppE (VarE $ mkName "fromFloatDigits") (LitE (RationalL rat)))
 toExp (JsonIdVar v) = return $
     VarE $ mkName v
@@ -109,9 +98,10 @@ toExp (JsonIdVar v) = return $
 toExp (JsonBool b) = return $
     AppE (ConE $ mkName "Data.Aeson.Types.Bool") (ConE $ mkName (if b then "True" else "False"))
 
-toExp (JsonCode exp) = return $
-    AppE (VarE $ mkName "toJSON") exp
+toExp (JsonCode e) = return $
+    AppE (VarE $ mkName "toJSON") e
 
 -- Helpers
+packE :: Exp -> Exp
 packE = AppE (VarE $ mkName "Data.Text.pack")
 
