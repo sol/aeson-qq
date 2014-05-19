@@ -1,8 +1,7 @@
-{-# LANGUAGE DeriveDataTypeable, TemplateHaskell, QuasiQuotes #-}
+{-# LANGUAGE TemplateHaskell, QuasiQuotes, DeriveGeneric #-}
 module Main where
 
 import Data.Aeson as A
-import Data.Aeson.Generic
 import Data.Aeson.QQ
 import Data.Aeson.Types
 
@@ -21,12 +20,10 @@ import Data.Attoparsec.Number
 
 import Data.Char
 
-import Data.Data
-
--- import Data.Ratio
-
 import Language.Haskell.TH
 import Data.Scientific
+
+import GHC.Generics
 
 main = $defaultMainGenerator
 
@@ -54,7 +51,7 @@ case_true = do
 case_json_var = do
   let actual = [aesonQQ| [null,{foo: <<x>>}] |]
       expected = arrays [A.Null, object [(pack "foo", number 42 )] ]
-      x = Data.Aeson.Generic.toJSON ( 42 :: Integer)
+      x = A.toJSON ( 42 :: Integer)
   expected @=? actual
 
 case_foo = do
@@ -110,7 +107,9 @@ case_semi_advanced_char = do
 -- Data types
 
 data Foo = Bar { age :: Integer}
-  deriving (Eq, Show, Typeable, Data)
+  deriving (Eq, Show, Generic)
+
+instance ToJSON Foo
 
 
 -- Helpers

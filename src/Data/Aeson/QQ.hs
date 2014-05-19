@@ -51,7 +51,6 @@ import Control.Applicative
 import Data.JSON.QQ as QQ
 
 import Data.Aeson as A
-import Data.Aeson.Generic
 
 import Data.Ratio
 import Text.ParserCombinators.Parsec
@@ -111,7 +110,7 @@ toExp (JsonBool b) = return $
     AppE (ConE $ mkName "Data.Aeson.Types.Bool") (ConE $ mkName (if b then "True" else "False"))
 
 toExp (JsonCode exp) = return $
-    AppE (VarE $ mkName "Data.Aeson.Generic.toJSON") exp
+    AppE (VarE $ mkName "toJSON") exp
 
 -- Helpers
 packE = AppE (VarE $ mkName "Data.Text.pack")
