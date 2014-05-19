@@ -1,5 +1,5 @@
 {-# OPTIONS_GHC -XDeriveDataTypeable -XTemplateHaskell -XQuasiQuotes #-}
-module Data.Aeson.TestQQ where
+module Main where
 
 import Data.Aeson as A
 import Data.Aeson.Generic
@@ -25,7 +25,8 @@ import Data.Data
 
 -- import Data.Ratio
 
-import Language.Haskell.TH 
+import Language.Haskell.TH
+import Data.Scientific
 
 main = $defaultMainGenerator
 
@@ -78,7 +79,7 @@ case_multiline = do
   let actual =
         [aesonQQ|
           [   {
-            user: 
+            user:
               "Pelle"},
            {user: "Arne"}]
          |]
@@ -102,7 +103,7 @@ case_semi_advanced_code = do
 case_semi_advanced_char = do
   let actual = [aesonQQ| { name: <| Prelude.map Data.Char.toUpper name |> } |]
       expected = object [(pack "name", string' "PELLE")]
-      name = "Pelle" 
+      name = "Pelle"
   expected @=? actual
 
 
@@ -116,6 +117,6 @@ data Foo = Bar { age :: Integer}
 
 arrays = A.Array . fromList
 
-string' s = A.String $ pack s 
+string' s = A.String $ pack s
 
-number n = A.Number (Data.Attoparsec.Number.D n)
+number = A.Number

@@ -3,7 +3,7 @@ version:             0.4.1
 synopsis:            Json Quasiquatation for Haskell.
 
 -- A longer description of the package.
-description:  
+description:
     @aeson-qq@ provides json quasiquatation for Haskell.
     .
     This package expose the function @aesonQQ@ that compile time converts json code into a @Data.Aeson.Value@.
@@ -20,15 +20,44 @@ author:              Oscar Finnsson
 maintainer:          oscar.finnsson@gmail.com
 category:            JSON
 build-type:          Simple
-cabal-version:       >=1.6
+cabal-version:       >= 1.8
 
 library
   hs-source-dirs: src
   exposed-modules: Data.Aeson.QQ
-  build-depends: base >= 4.3 && < 5, aeson, parsec >= 2, json-qq == 0.4.1, template-haskell, haskell-src-meta >= 0.1.0
+  build-depends:
+      base >= 4.3 && < 5
+    , aeson >= 0.7
+    , parsec >= 2
+    , json-qq == 0.4.1
+    , template-haskell
+    , haskell-src-meta >= 0.1.0
+    , scientific
+
+test-suite test
+  type:
+      exitcode-stdio-1.0
+  ghc-options:
+      -Wall
+  hs-source-dirs:
+      test
+  main-is:
+      Data/Aeson/QQTest.hs
+  build-depends:
+      base    == 4.*
+    , aeson-qq
+    , scientific
+    , template-haskell
+    , attoparsec
+    , text
+    , vector
+    , aeson
+    , test-framework
+    , test-framework-quickcheck2
+    , test-framework-hunit
+    , test-framework-th
+    , HUnit
 
 source-repository head
   type:     git
   location: https://github.com/finnsson/aeson-qq/
-
-
