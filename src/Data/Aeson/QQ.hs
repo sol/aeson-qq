@@ -1,5 +1,3 @@
-{-# LANGUAGE TemplateHaskell, QuasiQuotes #-}
-
 -- | This package expose the function @aesonQQ@ that compile time converts json code into a @Data.Aeson.Value@.
 --    @aesonQQ@ got the signature
 --

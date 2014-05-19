@@ -1,4 +1,4 @@
-{-# OPTIONS_GHC -XDeriveDataTypeable -XTemplateHaskell -XQuasiQuotes #-}
+{-# LANGUAGE DeriveDataTypeable, TemplateHaskell, QuasiQuotes #-}
 module Main where
 
 import Data.Aeson as A
