@@ -27,6 +27,8 @@ library
   exposed-modules: Data.Aeson.QQ
   build-depends:
       base >= 4.6 && < 5
+    , text
+    , vector
     , aeson >= 0.7
     , parsec >= 2
     , json-qq == 0.4.1

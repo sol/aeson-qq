@@ -1,3 +1,4 @@
+{-# LANGUAGE TemplateHaskell #-}
 -- | This package expose the function @aesonQQ@ that compile time converts json code into a @Data.Aeson.Value@.
 --    @aesonQQ@ got the signature
 --
@@ -45,6 +46,9 @@ import Language.Haskell.TH
 import Language.Haskell.TH.Quote
 
 import Control.Applicative
+import qualified Data.Vector as V
+import qualified Data.Text as T
+import Data.Aeson
 
 import Data.JSON.QQ as QQ
 
@@ -69,39 +73,24 @@ jsonExp txt =
 -- JSValue etc to ExpQ
 ---------
 toExp :: QQ.JsonValue -> ExpQ
-
-toExp (JsonString str) = return $
-    AppE (ConE $ mkName "Data.Aeson.Types.String") (packE (LitE (StringL $ str)))
-
-toExp (JsonNull) = return $ ConE $ mkName "Data.Aeson.Types.Null"
-
-toExp (JsonObject objs) =
-    AppE (VarE $ mkName "Data.Aeson.Types.object") . ListE <$> jsList
+toExp (JsonString str) = [|String (T.pack str)|]
+toExp (JsonNull) = [|Null|]
+toExp (JsonObject objs) = [|object $jsList|]
     where
-      jsList :: Q [Exp] -- [(String,JSValue)]
-      jsList = mapM objs2list (objs)
+      jsList :: ExpQ
+      jsList = ListE <$> mapM objs2list (objs)
+
       objs2list :: (HashKey, JsonValue) -> ExpQ
       objs2list (key, value) = do
-        v <- toExp value
-        return $ case key of
-          HashStringKey k -> TupE [packE (LitE (StringL k)), v]
-          HashVarKey k -> TupE [packE (VarE $ mkName k), v]
-
-toExp (JsonArray arr) =
-    AppE (ConE $ mkName "Data.Aeson.Types.Array") . AppE (VarE $ mkName "Data.Vector.fromList") . ListE <$> mapM toExp arr
-
-toExp (JsonNumber _ rat) = return $
-    AppE (ConE $ mkName "Data.Aeson.Types.Number") (AppE (VarE $ mkName "fromFloatDigits") (LitE (RationalL rat)))
-toExp (JsonIdVar v) = return $
-    VarE $ mkName v
-
-toExp (JsonBool b) = return $
-    AppE (ConE $ mkName "Data.Aeson.Types.Bool") (ConE $ mkName (if b then "True" else "False"))
-
-toExp (JsonCode e) = return $
-    AppE (VarE $ mkName "toJSON") e
+        case key of
+          HashStringKey k -> [|(T.pack k, $(toExp value))|]
+          HashVarKey k -> [|(T.pack $(dyn k), $(toExp value))|]
+toExp (JsonArray arr) = [|Array $ V.fromList $(ListE <$> mapM toExp arr)|]
+toExp (JsonNumber _ rat) = [|Number (fromRational $(return $ LitE $ RationalL rat))|]
+toExp (JsonIdVar v) = dyn v
+toExp (JsonBool b) = [|Bool b|]
+toExp (JsonCode e) = [|toJSON $(return e)|]
 
 -- Helpers
-packE :: Exp -> Exp
-packE = AppE (VarE $ mkName "Data.Text.pack")
-
+packE :: Exp -> ExpQ
+packE e = [|T.pack $(return e)|]

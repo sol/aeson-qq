@@ -5,7 +5,6 @@ module Main where
 
 import Data.Aeson as A
 import Data.Aeson.QQ
-import Data.Aeson.Types
 
 -- for test
 import Test.Framework.TH
@@ -16,8 +15,6 @@ import Data.Vector
 import Data.Text
 
 import Data.Char
-
-import Data.Scientific
 
 import GHC.Generics
 
