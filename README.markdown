@@ -2,28 +2,35 @@
 
 JSON quasiquatation for Haskell.
 
-This package expose the function `aesonQQ` that compile time converts json code into a `Data.Aeson.Value`.
-`aesonQQ` got the signature
+This package expose the function `aesonQQ` that compile time converts json
+code into a `Data.Aeson.Value`.  @aesonQQ@ got the signature
 
     aesonQQ :: QuasiQuoter
 
 and is used like
 
-    myCode = [aesonQQ| {age: 23, name: "Pelle", likes: ["mac","Haskell"] } |]
+    myCode = [aesonQQ| {age: 23, name: "John", likes: ["linux", "Haskell"]} |]
 
 where it is important that
 
-* you got no space in `[aesonQQ|` and
-* no additional code after `|]`.
+* you got no space in @[aesonQQ|@ and
+* no additional code after @|]@.
 
 The quasiquatation can also bind to variables like
 
-    myCode = [aesonQQ | {age: <| age |>, name: <| name |>} |]
-     where age = 34 :: Integer
-           name = "Pelle"
+    myCode = [aesonQQ| {age: <|age|>, name: <|name|>} |]
+    where age = 23 :: Integer
+          name = "John"
 
-or contain Haskell code like
+where the function  `toJSON` will be called on @age@ and @name@ at runtime.
 
-    myCode = [aesonQQ | {age: <| age + 42 :: Integer |>, name: <| map toUpper name |>} |]
-     where age = 34 :: Integer
-           name = "Pelle"
+You can also insert Haskell code:
+
+    myCode = [aesonQQ| {age: <|succ age|>, name: <|map toUpper name|>} |]
+    where age = 23 :: Integer
+          name = "John"
+
+If you want to replace the name of the key in a hash you'll use the $-syntax:
+
+    foo = [aesonQQ| {$bar: 42} |]
+    bar = "age"
