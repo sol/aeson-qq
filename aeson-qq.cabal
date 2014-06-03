@@ -11,6 +11,7 @@ description:      @aeson-qq@ provides json quasiquatation for Haskell.
                   Consult documentation in the module @Data.Aeson.QQ@.
 
 homepage:         http://github.com/zalora/aeson-qq
+license:          MIT
 license-file:     LICENSE
 author:           Oscar Finnsson
 maintainer:       Simon Hengel <sol@typeful.net>
