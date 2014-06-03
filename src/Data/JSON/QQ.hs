@@ -1,17 +1,4 @@
-{-# OPTIONS_GHC -XTemplateHaskell -XQuasiQuotes -XUndecidableInstances #-}
-
--- | This package expose the parser @jsonParser@.
---
--- Only developers that develop new json quasiquoters should use this library!
---
--- See @text-json-qq@ and @aeson-qq@ for usage.
---
-
-module Data.JSON.QQ (
-  JsonValue (..),
-  HashKey (..),
-  parsedJson
-) where
+module Data.JSON.QQ (JsonValue (..), HashKey (..), parsedJson) where
 
 import Control.Applicative
 
@@ -47,37 +34,17 @@ data HashKey =
   HashVarKey String
   | HashStringKey String
 
-------
--- Grammar
--- jp = json parsec
------
-
-(=>>) :: Monad m => m a -> b -> m b
-x =>> y = x >> return y
-
 type JsonParser = Parser JsonValue
 
--- data QQJsCode =
---   QQjs JSValue
---   | QQcode String
-
-jsonParser :: JsonParser
-jsonParser = do
+jpValue :: JsonParser
+jpValue = do
   spaces
-  res <- jpTrue <|> jpFalse <|> try jpIdVar <|> jpNull <|> jpString <|> jpObject <|> jpNumber  <|> jpArray <|> jpCode
+  res <- jpBool <|> try jpIdVar <|> jpNull <|> jpString <|> jpObject <|> jpNumber  <|> jpArray <|> jpCode
   spaces
   return res
 
-jpValue = jsonParser
-
-jpTrue :: JsonParser
-jpTrue = jpBool "true" True
-
-jpFalse :: JsonParser
-jpFalse = jpBool "false" False
-
-jpBool :: String -> Bool -> JsonParser
-jpBool txt b = string txt =>> JsonBool b
+jpBool :: JsonParser
+jpBool = JsonBool <$> (string "true" *> pure True <|> string "false" *> pure False)
 
 jpCode :: JsonParser
 jpCode = JsonCode <$> (string "<|" *> parseExp')
@@ -96,8 +63,7 @@ jpIdVar = JsonIdVar <$> between (string "<<") (string ">>") symbol
 
 
 jpNull :: JsonParser
-jpNull = do
-  string "null" =>> JsonNull
+jpNull = string "null" *> pure JsonNull
 
 jpString :: JsonParser
 jpString = between (char '"') (char '"') (option [""] $ many chars) >>= return . JsonString . concat -- do
