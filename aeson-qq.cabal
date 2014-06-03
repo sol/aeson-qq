@@ -32,13 +32,11 @@ library
     , text
     , vector
     , aeson >= 0.7
-    , parsec >= 2
     , json-qq == 0.4.1
     , template-haskell
     , haskell-src-meta >= 0.1.0
-    , scientific
 
-test-suite test
+test-suite spec
   type:
       exitcode-stdio-1.0
   ghc-options:
@@ -46,18 +44,9 @@ test-suite test
   hs-source-dirs:
       test
   main-is:
-      Data/Aeson/QQTest.hs
+      Spec.hs
   build-depends:
       base >= 4.6 && < 5
     , aeson-qq
-    , scientific
-    , template-haskell
-    , attoparsec
-    , text
-    , vector
     , aeson
-    , test-framework
-    , test-framework-quickcheck2
-    , test-framework-hunit
-    , test-framework-th
-    , HUnit
+    , hspec
