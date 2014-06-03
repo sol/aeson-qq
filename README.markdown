@@ -3,7 +3,7 @@
 JSON quasiquatation for Haskell.
 
 This package expose the function `aesonQQ` that compile time converts json
-code into a `Data.Aeson.Value`.  @aesonQQ@ got the signature
+code into a `Data.Aeson.Value`.  `aesonQQ` got the signature
 
     aesonQQ :: QuasiQuoter
 
@@ -13,8 +13,8 @@ and is used like
 
 where it is important that
 
-* you got no space in @[aesonQQ|@ and
-* no additional code after @|]@.
+* you got no space in `[aesonQQ|` and
+* no additional code after `|]`.
 
 The quasiquatation can also bind to variables like
 
@@ -22,7 +22,7 @@ The quasiquatation can also bind to variables like
     where age = 23 :: Integer
           name = "John"
 
-where the function  `toJSON` will be called on @age@ and @name@ at runtime.
+where the function  `toJSON` will be called on `age` and `name` at runtime.
 
 You can also insert Haskell code:
 
