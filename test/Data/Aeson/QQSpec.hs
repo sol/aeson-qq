@@ -19,7 +19,7 @@ spec = do
       [aesonQQ|{foo: "ba r.\".\\.r\n"}|] `shouldBe` object [("foo", "ba r.\\\".\\\\.r\\n")]
 
     it "can construct arrays" $ do
-      [aesonQQ|[null, {foo: 23}]|] `shouldBe` toJSON [Null, object [("foo", Number 23.0)] ]
+      [aesonQQ|[null, {foo: 23}]|] `shouldBe` toJSON [Null, object [("foo", Number 23.0)]]
 
     it "can construct true, false and null" $ do
       [aesonQQ|[true, false, null]|] `shouldBe` toJSON [Bool True, Bool False, Null]
@@ -33,11 +33,11 @@ spec = do
           user:
             "Joe"},
          {user: "John"}]
-       |] `shouldBe` toJSON [object [("user", "Joe")], object [ ("user", "John")] ]
+       |] `shouldBe` toJSON [object [("user", "Joe")], object [("user", "John")]]
 
     it "can interpolate JSON values" $ do
-      let x = toJSON ( 23 :: Int)
-      [aesonQQ|[null, {foo: <<x>>}]|] `shouldBe` toJSON [Null, object [("foo", Number 23 )] ]
+      let x = object [("foo", Number 23)]
+      [aesonQQ|[null, <<x>>]|] `shouldBe` toJSON [Null, x]
 
     it "can interpolate field names" $ do
       let foo = "zoo"
@@ -45,7 +45,7 @@ spec = do
 
     it "can interpolate numbers" $ do
       let x = 23 :: Int
-      [aesonQQ|[null, {foo: <|x|>}]|] `shouldBe` toJSON [Null, object [("foo", Number 23)] ]
+      [aesonQQ|[null, {foo: <|x|>}]|] `shouldBe` toJSON [Null, object [("foo", Number 23)]]
 
     it "can interpolate strings" $ do
       let foo = "bar" :: String
