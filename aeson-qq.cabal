@@ -48,6 +48,9 @@ test-suite spec
       test
   main-is:
       Spec.hs
+  other-modules:
+      Person
+      Data.Aeson.QQSpec
   build-depends:
       base >= 4.6 && < 5
     , aeson-qq
