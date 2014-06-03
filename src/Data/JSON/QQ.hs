@@ -26,7 +26,6 @@ data JsonValue =
   | JsonNumber Bool Rational
   | JsonObject [(HashKey,JsonValue)]
   | JsonArray [JsonValue]
-  | JsonIdVar String
   | JsonBool Bool
   | JsonCode Exp
 
@@ -39,7 +38,7 @@ type JsonParser = Parser JsonValue
 jpValue :: JsonParser
 jpValue = do
   spaces
-  res <- jpBool <|> try jpIdVar <|> jpNull <|> jpString <|> jpObject <|> jpNumber  <|> jpArray <|> jpCode
+  res <- jpBool <|> jpNull <|> jpString <|> jpObject <|> jpNumber  <|> jpArray <|> jpCode
   spaces
   return res
 
@@ -54,13 +53,6 @@ jpCode = JsonCode <$> (string "<|" *> parseExp')
       case (parseExp str) of
         Left l -> fail l
         Right r -> return r
-
-
-
-
-jpIdVar :: JsonParser
-jpIdVar = JsonIdVar <$> between (string "<<") (string ">>") symbol
-
 
 jpNull :: JsonParser
 jpNull = string "null" *> pure JsonNull

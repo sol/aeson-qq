@@ -80,7 +80,6 @@ toExp (JsonObject objs) = [|object $jsList|]
           HashVarKey k -> [|(T.pack $(dyn k), $(toExp value))|]
 toExp (JsonArray arr) = [|Array $ V.fromList $(ListE <$> mapM toExp arr)|]
 toExp (JsonNumber _ rat) = [|Number (fromRational $(return $ LitE $ RationalL rat))|]
-toExp (JsonIdVar v) = dyn v
 toExp (JsonBool b) = [|Bool b|]
 toExp (JsonCode e) = [|toJSON $(return e)|]
 

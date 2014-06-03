@@ -37,7 +37,7 @@ spec = do
 
     it "can interpolate JSON values" $ do
       let x = object [("foo", Number 23)]
-      [aesonQQ|[null, <<x>>]|] `shouldBe` toJSON [Null, x]
+      [aesonQQ|[null, <|x|>]|] `shouldBe` toJSON [Null, x]
 
     it "can interpolate field names" $ do
       let foo = "zoo"
