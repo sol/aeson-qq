@@ -13,6 +13,8 @@ module Data.JSON.QQ (
   parsedJson
 ) where
 
+import Control.Applicative
+
 import Language.Haskell.TH
 import Language.Haskell.TH.Quote
 
@@ -20,7 +22,7 @@ import Data.Data
 import Data.Maybe
 
 import Data.Ratio
-import Text.ParserCombinators.Parsec
+import Text.ParserCombinators.Parsec hiding (many, (<|>))
 import Text.ParserCombinators.Parsec.Error
 
 import Language.Haskell.Meta.Parse
@@ -53,10 +55,6 @@ data HashKey =
 (=>>) :: Monad m => m a -> b -> m b
 x =>> y = x >> return y
 
-
-(>>>=) :: Monad m => m a -> (a -> b) -> m b
-x >>>= y = x >>= return . y
-
 type JsonParser = Parser JsonValue
 
 -- data QQJsCode =
@@ -82,9 +80,7 @@ jpBool :: String -> Bool -> JsonParser
 jpBool txt b = string txt =>> JsonBool b
 
 jpCode :: JsonParser
-jpCode = do
-  string "<|"
-  parseExp' >>>= JsonCode
+jpCode = JsonCode <$> (string "<|" *> parseExp')
   where
     parseExp' = do
       str <- untilString
@@ -96,7 +92,7 @@ jpCode = do
 
 
 jpIdVar :: JsonParser
-jpIdVar = between (string "<<") (string ">>") symbol >>>= JsonIdVar
+jpIdVar = JsonIdVar <$> between (string "<<") (string ">>") symbol
 
 
 jpNull :: JsonParser
@@ -128,10 +124,10 @@ jpObject = do
       return (name,value)
 
 symbolKey :: CharParser () HashKey
-symbolKey = symbol >>>= HashStringKey
+symbolKey = HashStringKey <$> symbol
 
 quotedStringKey :: CharParser () HashKey
-quotedStringKey = quotedString >>>= HashStringKey
+quotedStringKey = HashStringKey <$> quotedString
 
 varKey :: CharParser () HashKey
 varKey = do
@@ -140,7 +136,7 @@ varKey = do
   return $ HashVarKey sym
 
 jpArray :: CharParser () JsonValue
-jpArray = between (char '[') (char ']') (commaSep jpValue) >>>= JsonArray
+jpArray = JsonArray <$> between (char '[') (char ']') (commaSep jpValue)
 
 -------
 -- helpers for parser/grammar
@@ -178,7 +174,7 @@ withDot = do
   return $ o:d
 
 quotedString :: CharParser () String
-quotedString = between (char '"') (char '"') (option [""] $ many chars) >>>= concat
+quotedString = concat <$> between (char '"') (char '"') (option [""] $ many chars)
 
 symbol :: CharParser () String
 symbol = many1 (noneOf "\\ \":;><$")
