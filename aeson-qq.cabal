@@ -1,32 +1,32 @@
-name:                aeson-qq
-version:             0.6.0
-synopsis:            Json Quasiquatation for Haskell.
-description:
-    @aeson-qq@ provides json quasiquatation for Haskell.
-    .
-    This package expose the function @aesonQQ@ that compile time converts json code into a @Data.Aeson.Value@.
-    @aesonQQ@ got the signature
-    .
-    > aesonQQ :: QuasiQuoter.
-    .
-    Consult documentation in the module @Data.Aeson.QQ@.
+name:             aeson-qq
+version:          0.6.0
+synopsis:         Json Quasiquatation for Haskell.
+description:      @aeson-qq@ provides json quasiquatation for Haskell.
+                  .
+                  This package expose the function @aesonQQ@ that compile time converts json code into a @Data.Aeson.Value@.
+                  @aesonQQ@ got the signature
+                  .
+                  > aesonQQ :: QuasiQuoter.
+                  .
+                  Consult documentation in the module @Data.Aeson.QQ@.
 
-homepage:            http://github.com/zalora/aeson-qq
-license:             MIT
-license-file:        LICENSE
-author:              Oscar Finnsson
-maintainer:          Simon Hengel <sol@typeful.net>
-category:            JSON
-build-type:          Simple
-cabal-version:       >= 1.8
+homepage:         http://github.com/zalora/aeson-qq
+license-file:     LICENSE
+author:           Oscar Finnsson
+maintainer:       Simon Hengel <sol@typeful.net>
+category:         JSON
+build-type:       Simple
+cabal-version:    >= 1.8
 
 source-repository head
-  type:     git
+  type: git
   location: https://github.com/zalora/aeson-qq/
 
 library
-  hs-source-dirs: src
-  exposed-modules: Data.Aeson.QQ
+  hs-source-dirs:
+      src
+  exposed-modules:
+      Data.Aeson.QQ
   build-depends:
       base >= 4.6 && < 5
     , text
