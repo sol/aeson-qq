@@ -1,5 +1,5 @@
 name:             aeson-qq
-version:          0.6.0
+version:          0.6.1
 synopsis:         Json Quasiquatation for Haskell.
 description:      @aeson-qq@ provides json quasiquatation for Haskell.
                   .
