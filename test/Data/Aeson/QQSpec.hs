@@ -37,7 +37,7 @@ spec = do
 
     it "can interpolate JSON values" $ do
       let x = object [("foo", Number 23)]
-      [aesonQQ|[null, <|x|>]|] `shouldBe` toJSON [Null, x]
+      [aesonQQ|[null, #{x}]|] `shouldBe` toJSON [Null, x]
 
     it "can interpolate field names" $ do
       let foo = "zoo"
@@ -45,21 +45,21 @@ spec = do
 
     it "can interpolate numbers" $ do
       let x = 23 :: Int
-      [aesonQQ|[null, {foo: <|x|>}]|] `shouldBe` toJSON [Null, object [("foo", Number 23)]]
+      [aesonQQ|[null, {foo: #{x}}]|] `shouldBe` toJSON [Null, object [("foo", Number 23)]]
 
     it "can interpolate strings" $ do
       let foo = "bar" :: String
-      [aesonQQ|{foo: <|foo|>}|] `shouldBe` object [("foo", "bar")]
+      [aesonQQ|{foo: #{foo}}|] `shouldBe` object [("foo", "bar")]
 
     it "can interpolate data types" $ do
       let foo = Person.Person "Joe" 23
-      [aesonQQ|<|foo|>|] `shouldBe` object [("name", "Joe"), ("age", Number 23)]
+      [aesonQQ|#{foo}|] `shouldBe` object [("name", "Joe"), ("age", Number 23)]
 
     it "can interpolate simple expressions" $ do
       let x = 23 :: Int
           y = 42
-      [aesonQQ|{foo: <|x + y|>}|] `shouldBe` object [("foo", Number 65)]
+      [aesonQQ|{foo: #{x + y}}|] `shouldBe` object [("foo", Number 65)]
 
     it "can interpolate more complicated expressions" $ do
       let name = "Joe"
-      [aesonQQ|{name: <|map toUpper name|>}|] `shouldBe` object [("name", "JOE")]
+      [aesonQQ|{name: #{map toUpper name}}|] `shouldBe` object [("name", "JOE")]

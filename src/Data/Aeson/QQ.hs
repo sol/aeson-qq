@@ -17,7 +17,7 @@
 --
 -- The quasiquatation can also bind to variables like
 --
--- > myCode = [aesonQQ| {age: <|age|>, name: <|name|>} |]
+-- > myCode = [aesonQQ| {age: #{age}, name: #{name}} |]
 -- > where age = 23 :: Integer
 -- >       name = "John"
 --
@@ -25,7 +25,7 @@
 --
 -- You can also insert Haskell code:
 --
--- > myCode = [aesonQQ| {age: <|succ age|>, name: <|map toUpper name|>} |]
+-- > myCode = [aesonQQ| {age: #{succ age}, name: #{map toUpper name}} |]
 -- > where age = 23 :: Integer
 -- >       name = "John"
 --

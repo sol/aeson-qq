@@ -46,10 +46,10 @@ jpBool :: JsonParser
 jpBool = JsonBool <$> (string "true" *> pure True <|> string "false" *> pure False)
 
 jpCode :: JsonParser
-jpCode = JsonCode <$> (string "<|" *> parseExp')
+jpCode = JsonCode <$> (string "#{" *> parseExp')
   where
     parseExp' = do
-      str <- untilString
+      str <- many1 (noneOf "}") <* char '}'
       case (parseExp str) of
         Left l -> fail l
         Right r -> return r
@@ -98,19 +98,6 @@ jpArray = JsonArray <$> between (char '[') (char ']') (commaSep jpValue)
 
 -------
 -- helpers for parser/grammar
-
-untilString :: Parser String
-untilString = do
-      n0 <- option "" $ many1 (noneOf "|")
-      char '|'
-      n1 <- option "" $ many1 (noneOf ">")
-      char '>'
-      if not $ null n1
-        then do n2 <- untilString
-                return $ concat [n0,n1,n2]
-        else return $ concat [n0,n1]
-
-
 
 float :: CharParser st Double
 float = do

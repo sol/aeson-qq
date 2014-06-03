@@ -18,7 +18,7 @@ where it is important that
 
 The quasiquatation can also bind to variables like
 
-    myCode = [aesonQQ| {age: <|age|>, name: <|name|>} |]
+    myCode = [aesonQQ| {age: #{age}, name: #{name}} |]
     where age = 23 :: Integer
           name = "John"
 
@@ -26,7 +26,7 @@ where the function  `toJSON` will be called on `age` and `name` at runtime.
 
 You can also insert Haskell code:
 
-    myCode = [aesonQQ| {age: <|succ age|>, name: <|map toUpper name|>} |]
+    myCode = [aesonQQ| {age: #{succ age}, name: #{map toUpper name}} |]
     where age = 23 :: Integer
           name = "John"
 
