@@ -1,36 +1,54 @@
-## Data.Aeson.QQ ##
+# aeson-qq: JSON quasiquoter for Haskell
 
-JSON quasiquatation for Haskell.
+This package expose the function
+[`aesonQQ`](http://hackage.haskell.org/package/aeson-qq/docs/Data-Aeson-QQ.html#v:aesonQQ)
+that compile-time converts a string representation of a JSON value into
+[`Data.Aeson.Value`](http://hackage.haskell.org/package/aeson-0.7.0.6/docs/Data-Aeson.html#t:Value).
+`aesonQQ` got the signature
 
-This package expose the function `aesonQQ` that compile time converts json
-code into a `Data.Aeson.Value`.  `aesonQQ` got the signature
-
-    aesonQQ :: QuasiQuoter
+```haskell
+aesonQQ :: QuasiQuoter
+```
 
 and is used like
 
-    myCode = [aesonQQ| {age: 23, name: "John", likes: ["linux", "Haskell"]} |]
+~~~ {.haskell}
+{-# LANGUAGE QuasiQuotes #-}
+import Data.Aeson.QQ
+import Data.Aeson (Value)
 
-where it is important that
+john :: Value
+john = [aesonQQ| {age: 23, name: "John", likes: ["linux", "Haskell"]} |]
+~~~
 
-* you got no space in `[aesonQQ|` and
-* no additional code after `|]`.
+The quasiquoter can also interpolate variables like
 
-The quasiquatation can also bind to variables like
+~~~ {.haskell}
+jane :: Value
+jane = [aesonQQ| {age: #{age}, name: #{name}} |]
+  where
+    age = 23 :: Int
+    name = "Jane"
+~~~
 
-    myCode = [aesonQQ| {age: #{age}, name: #{name}} |]
-    where age = 23 :: Integer
-          name = "John"
+where the function
+[`toJSON`](http://hackage.haskell.org/package/aeson-0.7.0.6/docs/Data-Aeson.html#v:toJSON).
+will be called on `age` and `name` at runtime.
 
-where the function  `toJSON` will be called on `age` and `name` at runtime.
+You can also interpolate arbitrary Haskell expressions:
 
-You can also insert Haskell code:
-
-    myCode = [aesonQQ| {age: #{succ age}, name: #{map toUpper name}} |]
-    where age = 23 :: Integer
-          name = "John"
+~~~ {.haskell}
+mary :: Value
+mary = [aesonQQ| {age: #{succ age}, name: "Mary"} |]
+  where
+    age = 23 :: Int
+~~~
 
 If you want to replace the name of the key in a hash you'll use the $-syntax:
 
-    foo = [aesonQQ| {$bar: 42} |]
-    bar = "age"
+~~~ {.haskell}
+joe :: Value
+joe = [aesonQQ| {$key: 23, name: "Joe"} |]
+  where
+    key = "age"
+~~~
