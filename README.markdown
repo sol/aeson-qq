@@ -1,10 +1,10 @@
 # aeson-qq: JSON quasiquoter for Haskell
 
-This package expose the function
+This package exposes the function
 [`aesonQQ`](http://hackage.haskell.org/package/aeson-qq/docs/Data-Aeson-QQ.html#v:aesonQQ)
-that compile-time converts a string representation of a JSON value into
+that compile-time converts a string representation of a JSON value into a
 [`Data.Aeson.Value`](http://hackage.haskell.org/package/aeson-0.7.0.6/docs/Data-Aeson.html#t:Value).
-`aesonQQ` got the signature
+`aesonQQ` has the signature
 
 ```haskell
 aesonQQ :: QuasiQuoter

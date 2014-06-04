@@ -1,14 +1,16 @@
 name:             aeson-qq
 version:          0.6.1
-synopsis:         Json Quasiquatation for Haskell.
-description:      @aeson-qq@ provides json quasiquatation for Haskell.
+synopsis:         JSON quasiquoter for Haskell
+description:      @aeson-qq@ provides a JSON quasiquoter for Haskell.
                   .
-                  This package expose the function @aesonQQ@ that compile time converts json code into a @Data.Aeson.Value@.
-                  @aesonQQ@ got the signature
+                  This package exposes the function `aesonQQ` that compile-time
+                  converts a string representation of a JSON value into a
+                  `Data.Aeson.Value`.  `aesonQQ` has the signature
                   .
-                  > aesonQQ :: QuasiQuoter.
+                  >aesonQQ :: QuasiQuoter
                   .
-                  Consult documentation in the module @Data.Aeson.QQ@.
+                  Consult the @README@ for documentation:
+                  <https://github.com/zalora/aeson-qq#readme>
 
 homepage:         http://github.com/zalora/aeson-qq
 license:          MIT

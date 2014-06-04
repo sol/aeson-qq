@@ -1,6 +1,6 @@
 {-# LANGUAGE TemplateHaskell #-}
 -- | Have a loot at the <https://github.com/zalora/aeson-qq#readme README> for
--- documentatino.
+-- documentation.
 module Data.Aeson.QQ (aesonQQ) where
 
 import Language.Haskell.TH
