@@ -128,14 +128,14 @@ commaSep p  = p `sepBy` (char ',')
 
 chars :: CharParser () String
 chars = do
-   try (string "\\\"")
-   <|> try (string "\\/")
-   <|> try (string "\\\\")
-   <|> try (string "\\b")
-   <|> try (string "\\f")
-   <|> try (string "\\n")
-   <|> try (string "\\r")
-   <|> try (string "\\t")
+       try (string "\\\"" *> pure "\"")
+   <|> try (string "\\\\" *> pure "\\")
+   <|> try (string "\\/" *> pure "/")
+   <|> try (string "\\b" *> pure "\b")
+   <|> try (string "\\f" *> pure "\f")
+   <|> try (string "\\n" *> pure "\n")
+   <|> try (string "\\r" *> pure "\r")
+   <|> try (string "\\t" *> pure "\t")
    <|> try (unicodeChars)
    <|> many1 (noneOf "\\\"")
 

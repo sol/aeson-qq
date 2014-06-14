@@ -16,7 +16,7 @@ spec :: Spec
 spec = do
   describe "aesonQQ" $ do
     it "handles escape sequences" $ do
-      [aesonQQ|{foo: "ba r.\".\\.r\n"}|] `shouldBe` object [("foo", "ba r.\\\".\\\\.r\\n")]
+      [aesonQQ|{foo: "ba r.\".\\.r\n"}|] `shouldBe` object [("foo", "ba r.\".\\.r\n")]
 
     it "can construct arrays" $ do
       [aesonQQ|[null, {foo: 23}]|] `shouldBe` toJSON [Null, object [("foo", Number 23.0)]]
