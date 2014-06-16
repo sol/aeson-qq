@@ -15,23 +15,25 @@ import Text.ParserCombinators.Parsec.Error
 import Language.Haskell.Meta.Parse
 
 parsedJson :: String -> Either ParseError JsonValue
-parsedJson txt = parse jpValue "txt" txt
+parsedJson = parse (jpValue <* eof) "txt"
 
 -------
 -- Internal representation
 
 data JsonValue =
-  JsonNull
+    JsonNull
   | JsonString String
   | JsonNumber Bool Rational
   | JsonObject [(HashKey,JsonValue)]
   | JsonArray [JsonValue]
   | JsonBool Bool
   | JsonCode Exp
+  deriving (Eq, Show)
 
 data HashKey =
-  HashVarKey String
+    HashVarKey String
   | HashStringKey String
+  deriving (Eq, Show)
 
 type JsonParser = Parser JsonValue
 

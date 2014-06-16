@@ -49,7 +49,7 @@ test-suite spec
   ghc-options:
       -Wall
   hs-source-dirs:
-      test
+      src, test
   main-is:
       Spec.hs
   other-modules:
@@ -57,6 +57,12 @@ test-suite spec
       Data.Aeson.QQSpec
   build-depends:
       base >= 4.6 && < 5
-    , aeson-qq
+    , text
+    , vector
+    , aeson
+    , parsec
+    , template-haskell
+    , haskell-src-meta
+
     , aeson
     , hspec
