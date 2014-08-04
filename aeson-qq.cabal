@@ -38,7 +38,7 @@ library
       base >= 4.6 && < 5
     , text
     , vector
-    , aeson >= 0.7
+    , aeson >= 0.6
     , parsec
     , template-haskell
     , haskell-src-meta >= 0.1.0
