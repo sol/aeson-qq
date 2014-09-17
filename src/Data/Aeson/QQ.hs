@@ -50,7 +50,3 @@ toExp (JsonArray arr) = [|Array $ V.fromList $(ListE <$> mapM toExp arr)|]
 toExp (JsonNumber _ rat) = [|Number (fromRational $(return $ LitE $ RationalL rat))|]
 toExp (JsonBool b) = [|Bool b|]
 toExp (JsonCode e) = [|toJSON $(return e)|]
-
--- Helpers
-packE :: Exp -> ExpQ
-packE e = [|T.pack $(return e)|]

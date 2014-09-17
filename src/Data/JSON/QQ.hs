@@ -3,14 +3,8 @@ module Data.JSON.QQ (JsonValue (..), HashKey (..), parsedJson) where
 import Control.Applicative
 
 import Language.Haskell.TH
-import Language.Haskell.TH.Quote
 
-import Data.Data
-import Data.Maybe
-
-import Data.Ratio
 import Text.ParserCombinators.Parsec hiding (many, (<|>))
-import Text.ParserCombinators.Parsec.Error
 
 import Language.Haskell.Meta.Parse
 
@@ -77,7 +71,7 @@ jpObject = do
       spaces
       name <- varKey <|> symbolKey <|> quotedStringKey
       spaces
-      char ':'
+      _ <- char ':'
       spaces
       value <- jpValue
       spaces
@@ -90,10 +84,7 @@ quotedStringKey :: CharParser () HashKey
 quotedStringKey = HashStringKey <$> quotedString
 
 varKey :: CharParser () HashKey
-varKey = do
-  char '$'
-  sym <- symbol
-  return $ HashVarKey sym
+varKey = HashVarKey <$> (char '$' *> symbol)
 
 jpArray :: CharParser () JsonValue
 jpArray = JsonArray <$> between (char '[') (char ']') (commaSep jpValue)
@@ -108,17 +99,17 @@ float = do
   o <- option "" withDot
   e <- option "" withE
   return $ (read $ isMinus : d ++ o ++ e :: Double)
+  where
+    withE = do
+      e <- char 'e' <|> char 'E'
+      plusMinus <- option "" (string "+" <|> string "-")
+      d <- many digit
+      return $ e : plusMinus ++ d
 
-withE = do
-  e <- char 'e' <|> char 'E'
-  plusMinus <- option "" (string "+" <|> string "-")
-  d <- many digit
-  return $ e : plusMinus ++ d
-
-withDot = do
-  o <- char '.'
-  d <- many digit
-  return $ o:d
+    withDot = do
+      o <- char '.'
+      d <- many digit
+      return $ o:d
 
 quotedString :: CharParser () String
 quotedString = concat <$> between (char '"') (char '"') (option [""] $ many chars)
@@ -126,6 +117,7 @@ quotedString = concat <$> between (char '"') (char '"') (option [""] $ many char
 symbol :: CharParser () String
 symbol = many1 (noneOf "\\ \":;><${}")
 
+commaSep :: CharParser () a -> CharParser () [a]
 commaSep p  = p `sepBy` (char ',')
 
 chars :: CharParser () String
