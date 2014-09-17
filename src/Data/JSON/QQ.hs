@@ -124,7 +124,7 @@ quotedString :: CharParser () String
 quotedString = concat <$> between (char '"') (char '"') (option [""] $ many chars)
 
 symbol :: CharParser () String
-symbol = many1 (noneOf "\\ \":;><$")
+symbol = many1 (noneOf "\\ \":;><${}")
 
 commaSep p  = p `sepBy` (char ',')
 
