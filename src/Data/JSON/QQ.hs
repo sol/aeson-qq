@@ -17,7 +17,7 @@ parsedJson = parse (jpValue <* eof) "txt"
 data JsonValue =
     JsonNull
   | JsonString String
-  | JsonNumber Bool Scientific
+  | JsonNumber Scientific
   | JsonObject [(HashKey,JsonValue)]
   | JsonArray [JsonValue]
   | JsonBool Bool
@@ -57,7 +57,7 @@ jpString :: JsonParser
 jpString = between (char '"') (char '"') (option [""] $ many chars) >>= return . JsonString . concat -- do
 
 jpNumber :: JsonParser
-jpNumber = JsonNumber False <$> do
+jpNumber = JsonNumber <$> do
   isMinus <- option "" (string "-")
   d <- many1 digit
   o <- option "" withDot
