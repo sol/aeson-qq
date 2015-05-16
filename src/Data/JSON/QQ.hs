@@ -1,12 +1,12 @@
 module Data.JSON.QQ (JsonValue (..), HashKey (..), parsedJson) where
 
-import Control.Applicative
-
-import Language.Haskell.TH
-
-import Text.ParserCombinators.Parsec hiding (many, (<|>))
-
-import Language.Haskell.Meta.Parse
+import           Control.Applicative
+import           Language.Haskell.TH
+import           Text.ParserCombinators.Parsec hiding (many, (<|>))
+import           Language.Haskell.Meta.Parse
+import qualified Data.Attoparsec.Text as A
+import           Data.Scientific (Scientific)
+import qualified Data.Text as T
 
 parsedJson :: String -> Either ParseError JsonValue
 parsedJson = parse (jpValue <* eof) "txt"
@@ -17,7 +17,7 @@ parsedJson = parse (jpValue <* eof) "txt"
 data JsonValue =
     JsonNull
   | JsonString String
-  | JsonNumber Bool Rational
+  | JsonNumber Bool Scientific
   | JsonObject [(HashKey,JsonValue)]
   | JsonArray [JsonValue]
   | JsonBool Bool
@@ -57,9 +57,26 @@ jpString :: JsonParser
 jpString = between (char '"') (char '"') (option [""] $ many chars) >>= return . JsonString . concat -- do
 
 jpNumber :: JsonParser
-jpNumber = do
-  val <- float
-  return $ JsonNumber False (toRational val)
+jpNumber = JsonNumber False <$> do
+  isMinus <- option "" (string "-")
+  d <- many1 digit
+  o <- option "" withDot
+  e <- option "" withE
+  convert (isMinus ++ d ++ o ++ e)
+  where
+    withE = do
+      e <- char 'e' <|> char 'E'
+      plusMinus <- option "" (string "+" <|> string "-")
+      d <- many digit
+      return $ e : plusMinus ++ d
+
+    withDot = do
+      o <- char '.'
+      d <- many digit
+      return $ o:d
+
+    convert :: Monad m => String -> m Scientific
+    convert = either fail return . A.parseOnly (A.scientific <* A.endOfInput) . T.pack
 
 jpObject :: JsonParser
 jpObject = do
@@ -91,26 +108,6 @@ jpArray = JsonArray <$> between (char '[') (char ']') (commaSep jpValue)
 
 -------
 -- helpers for parser/grammar
-
-float :: CharParser st Double
-float = do
-  isMinus <- option ' ' (char '-')
-  d <- many1 digit
-  o <- option "" withDot
-  e <- option "" withE
-  return $ (read $ isMinus : d ++ o ++ e :: Double)
-  where
-    withE = do
-      e <- char 'e' <|> char 'E'
-      plusMinus <- option "" (string "+" <|> string "-")
-      d <- many digit
-      return $ e : plusMinus ++ d
-
-    withDot = do
-      o <- char '.'
-      d <- many digit
-      return $ o:d
-
 quotedString :: CharParser () String
 quotedString = concat <$> between (char '"') (char '"') (option [""] $ many chars)
 

@@ -15,6 +15,10 @@ spec = do
       let Right value = parsedJson "{foo: 23}"
       value `shouldBe` JsonObject [(HashStringKey "foo", JsonNumber False 23)]
 
+    it "parses decimal numbers" $ do
+      let Right value = parsedJson "{foo: 5.97}"
+      value `shouldBe` JsonObject [(HashStringKey "foo", JsonNumber False 5.97)]
+
     it "parses empty objects (regression test)" $ do
       let Right value = parsedJson "{}"
       value `shouldBe` JsonObject []
