@@ -3,10 +3,12 @@
 -- documentation.
 module Data.Aeson.QQ (aesonQQ) where
 
+import Prelude ()
+import Prelude.Compat
+
 import Language.Haskell.TH
 import Language.Haskell.TH.Quote
 
-import Control.Applicative
 import qualified Data.Vector as V
 import qualified Data.Text as T
 import Data.Aeson

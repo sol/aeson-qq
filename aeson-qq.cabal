@@ -36,6 +36,7 @@ library
       Data.JSON.QQ
   build-depends:
       base >= 4.5 && < 5
+    , base-compat
     , text
     , attoparsec
     , scientific
@@ -59,6 +60,7 @@ test-suite spec
       Data.Aeson.QQSpec
   build-depends:
       base >= 4.5 && < 5
+    , base-compat
     , text
     , attoparsec
     , scientific
