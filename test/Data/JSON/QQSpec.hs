@@ -19,9 +19,31 @@ spec = do
       let Right value = parsedJson "{foo: 5.97}"
       value `shouldBe` JsonObject [(HashStringKey "foo", JsonNumber 5.97)]
 
-    it "parses empty objects (regression test)" $ do
-      let Right value = parsedJson "{}"
-      value `shouldBe` JsonObject []
+    context "empty objects" $ do
+      it "parses empty objects (regression test)" $ do
+        let Right value = parsedJson "{}"
+        value `shouldBe` JsonObject []
+
+      it "parses empty objects that include whitespace (regression test)" $ do
+        let Right value = parsedJson "{ }"
+        value `shouldBe` JsonObject []
+
+      it "parses empty objects that include newlines (regression test)" $ do
+        let Right value = parsedJson "{\n}"
+        value `shouldBe` JsonObject []
+
+    context "empty arrays" $ do
+      it "parses empty arrays" $ do
+        let Right value = parsedJson "[   ]"
+        value `shouldBe` JsonArray []
+
+      it "parses empty arrays that include whitespace (regression test)" $ do
+        let Right value = parsedJson "[   ]"
+        value `shouldBe` JsonArray []
+
+      it "parses empty objects that include newlines (regression test)" $ do
+        let Right value = parsedJson "[\n]"
+        value `shouldBe` JsonArray []
 
     it "fails on excess input" $ do
       let Left err = parsedJson "{foo: 23} some excess input"
