@@ -1,5 +1,5 @@
 {-# LANGUAGE TemplateHaskell #-}
--- | Have a look at the <https://github.com/zalora/aeson-qq#readme README> for
+-- | Have a look at the <https://github.com/sol/aeson-qq#readme README> for
 -- documentation.
 module Data.Aeson.QQ (aesonQQ) where
 
