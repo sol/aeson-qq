@@ -1,3 +1,7 @@
+-- This file has been generated from package.yaml by hpack version 0.18.0.
+--
+-- see: https://github.com/sol/hpack
+
 name:             aeson-qq
 version:          0.8.1
 synopsis:         JSON quasiquoter for Haskell
@@ -11,29 +15,30 @@ description:      @aeson-qq@ provides a JSON quasiquoter for Haskell.
                   .
                   Consult the @README@ for documentation:
                   <https://github.com/sol/aeson-qq#readme>
-
-homepage:         http://github.com/sol/aeson-qq
+homepage:         https://github.com/sol/aeson-qq#readme
+bug-reports:      https://github.com/sol/aeson-qq/issues
 license:          MIT
 license-file:     LICENSE
 author:           Oscar Finnsson
 maintainer:       Simon Hengel <sol@typeful.net>
 category:         JSON
 build-type:       Simple
-cabal-version:    >= 1.8
+cabal-version:    >= 1.10
 
 source-repository head
   type: git
-  location: https://github.com/sol/aeson-qq/
+  location: https://github.com/sol/aeson-qq
 
 library
-  ghc-options:
-      -Wall
+  ghc-options: -Wall
   hs-source-dirs:
       src
   exposed-modules:
       Data.Aeson.QQ
   other-modules:
       Data.JSON.QQ
+      Paths_aeson_qq
+  default-language: Haskell2010
   build-depends:
       base >= 4.5 && < 5
     , base-compat
@@ -47,17 +52,19 @@ library
     , haskell-src-meta >= 0.1.0
 
 test-suite spec
-  type:
-      exitcode-stdio-1.0
-  ghc-options:
-      -Wall
+  type: exitcode-stdio-1.0
+  ghc-options: -Wall
   hs-source-dirs:
-      src, test
-  main-is:
-      Spec.hs
+      src
+      test
+  main-is: Spec.hs
   other-modules:
-      Person
+      Data.Aeson.QQ
+      Data.JSON.QQ
       Data.Aeson.QQSpec
+      Data.JSON.QQSpec
+      Person
+  default-language: Haskell2010
   build-depends:
       base >= 4.5 && < 5
     , base-compat
@@ -65,13 +72,9 @@ test-suite spec
     , attoparsec
     , scientific
     , vector
-    , aeson
+    , aeson >= 0.6
     , parsec
     , template-haskell
-    , haskell-src-meta
-
-    , aeson
+    , haskell-src-meta >= 0.1.0
     , hspec
-
-    -- Neded for GHC 7.4.*
     , ghc-prim
