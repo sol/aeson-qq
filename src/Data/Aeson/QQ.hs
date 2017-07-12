@@ -18,9 +18,9 @@ import Data.JSON.QQ as QQ
 aesonQQ :: QuasiQuoter
 aesonQQ = QuasiQuoter {
   quoteExp = jsonExp,
-  quotePat = const $ error "No quotePat defined for jsonQQ",
-  quoteType = const $ error "No quoteType defined for jsonQQ",
-  quoteDec = const $ error "No quoteDec defined for jsonQQ"
+  quotePat = const $ error "No quotePat defined for aesonQQ",
+  quoteType = const $ error "No quoteType defined for aesonQQ",
+  quoteDec = const $ error "No quoteDec defined for aesonQQ"
 }
 
 
