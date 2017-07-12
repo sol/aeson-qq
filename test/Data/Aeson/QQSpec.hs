@@ -63,3 +63,7 @@ spec = do
     it "can interpolate more complicated expressions" $ do
       let name = "Joe"
       [aesonQQ|{name: #{map toUpper name}}|] `shouldBe` object [("name", "JOE")]
+
+  describe "aesonQQFile" $ do
+    it "reads from a file" $ do
+      [aesonQQFile|test/Data/Aeson/sample.json|] `shouldBe` object [("foo", "bar")]

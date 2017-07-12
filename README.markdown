@@ -1,8 +1,9 @@
 # aeson-qq: JSON quasiquoter for Haskell
 
-This package exposes the function
+This package exposes the functions
 [`aesonQQ`](http://hackage.haskell.org/package/aeson-qq/docs/Data-Aeson-QQ.html#v:aesonQQ)
-that compile-time converts a string representation of a JSON value into a
+and [`aesonQQFile`](http://hackage.haskell.org/package/aeson-qq/docs/Data-Aeson-QQ.html#v:aesonQQFile)
+that compile-time convert a string representation of a JSON value into a
 [`Data.Aeson.Value`](http://hackage.haskell.org/package/aeson-0.7.0.6/docs/Data-Aeson.html#t:Value).
 `aesonQQ` has the signature
 
@@ -19,6 +20,17 @@ import Data.Aeson (Value)
 
 john :: Value
 john = [aesonQQ| {age: 23, name: "John", likes: ["linux", "Haskell"]} |]
+```
+
+`aesonQQFile` reads JSON from a file:
+
+```haskell
+{-# LANGUAGE QuasiQuotes #-}
+import Data.Aeson.QQ
+import Data.Aeson (Value)
+
+john :: Value
+john = [aesonQQFile|sample.json|]
 ```
 
 The quasiquoter can also interpolate variables like

@@ -1,0 +1,8 @@
+{
+  "age": 23,
+  "name": "John",
+  "likes": [
+    "linux",
+    "Haskell"
+  ]
+}

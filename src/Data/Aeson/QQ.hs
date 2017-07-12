@@ -1,7 +1,7 @@
 {-# LANGUAGE TemplateHaskell #-}
 -- | Have a look at the <https://github.com/sol/aeson-qq#readme README> for
 -- documentation.
-module Data.Aeson.QQ (aesonQQ) where
+module Data.Aeson.QQ (aesonQQ, aesonQQFile) where
 
 import Prelude ()
 import Prelude.Compat
@@ -22,6 +22,9 @@ aesonQQ = QuasiQuoter {
   quoteType = const $ error "No quoteType defined for aesonQQ",
   quoteDec = const $ error "No quoteDec defined for aesonQQ"
 }
+
+aesonQQFile :: QuasiQuoter
+aesonQQFile = quoteFile aesonQQ
 
 
 jsonExp :: String -> ExpQ
