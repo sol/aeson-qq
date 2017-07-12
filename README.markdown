@@ -44,7 +44,7 @@ jane = [aesonQQ| {age: #{age}, name: #{name}} |]
 ```
 
 where the function
-[`toJSON`](http://hackage.haskell.org/package/aeson-0.7.0.6/docs/Data-Aeson.html#v:toJSON).
+[`toJSON`](http://hackage.haskell.org/package/aeson-0.7.0.6/docs/Data-Aeson.html#v:toJSON)
 will be called on `age` and `name` at runtime.
 
 You can also interpolate arbitrary Haskell expressions:
