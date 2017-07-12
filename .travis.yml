@@ -1,4 +1,19 @@
-language: haskell
+language: generic
+
+before_install:
+  - curl -sSL https://get.haskellstack.org/ | sh
+  - stack setup
+
+install:
+  - stack init
+  - stack build
 
 script:
- - cabal configure --enable-tests --ghc-options=-Werror && cabal build && cabal test
+  - stack test
+
+sudo: required
+
+cache:
+  directories:
+    - $HOME/.stack
+    - .stack-work
