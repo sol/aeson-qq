@@ -47,7 +47,13 @@ toExp (JsonObject objs) = [|object $jsList|]
       objs2list (key, value) = do
         case key of
           HashStringKey k -> [|(T.pack k, $(toExp value))|]
-          HashVarKey k -> [|(T.pack $(dyn k), $(toExp value))|]
+          HashVarKey k -> [|(case toJSONKey of
+                              ToJSONKeyText toText _ -> toText $(dyn k)
+                              ToJSONKeyValue _ _     ->
+                                error "Quasiquoting array-style keys is unsupported"
+                            , $(toExp value)
+                            )
+                          |]
 toExp (JsonArray arr) = [|Array $ V.fromList $(ListE <$> mapM toExp arr)|]
 toExp (JsonNumber n) = [|Number (fromRational $(return $ LitE $ RationalL (toRational n)))|]
 toExp (JsonBool b) = [|Bool b|]
