@@ -75,7 +75,7 @@ jpNumber = JsonNumber <$> do
       d <- many digit
       return $ o:d
 
-    convert :: String -> JsonParser Scientific
+    convert :: String -> Parser Scientific
     convert = either fail return . A.parseOnly (A.scientific <* A.endOfInput) . T.pack
 
 jpObject :: JsonParser
