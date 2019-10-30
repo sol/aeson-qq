@@ -1,9 +1,13 @@
--- This file has been generated from package.yaml by hpack version 0.18.0.
+cabal-version: 1.12
+
+-- This file has been generated from package.yaml by hpack version 0.32.0.
 --
 -- see: https://github.com/sol/hpack
+--
+-- hash: a1f241da60cf8a9d7982813256a1f34533b63be4d8adaeef03e78814369707c4
 
 name:             aeson-qq
-version:          0.8.2
+version:          0.8.3
 synopsis:         JSON quasiquoter for Haskell
 description:      @aeson-qq@ provides a JSON quasiquoter for Haskell.
                   .
@@ -23,7 +27,6 @@ author:           Oscar Finnsson
 maintainer:       Simon Hengel <sol@typeful.net>
 category:         JSON
 build-type:       Simple
-cabal-version:    >= 1.10
 
 source-repository head
   type: git
@@ -40,16 +43,16 @@ library
       Paths_aeson_qq
   default-language: Haskell2010
   build-depends:
-      base >= 4.5 && < 5
-    , base-compat
-    , text
+      aeson >=0.6
     , attoparsec
-    , scientific
-    , vector
-    , aeson >= 0.6
+    , base >=4.5 && <5
+    , base-compat
+    , haskell-src-meta >=0.1.0
     , parsec
+    , scientific
     , template-haskell
-    , haskell-src-meta >= 0.1.0
+    , text
+    , vector
 
 test-suite spec
   type: exitcode-stdio-1.0
@@ -64,17 +67,18 @@ test-suite spec
       Data.Aeson.QQSpec
       Data.JSON.QQSpec
       Person
+      Paths_aeson_qq
   default-language: Haskell2010
   build-depends:
-      base >= 4.5 && < 5
-    , base-compat
-    , text
+      aeson >=0.6
     , attoparsec
-    , scientific
-    , vector
-    , aeson >= 0.6
-    , parsec
-    , template-haskell
-    , haskell-src-meta >= 0.1.0
-    , hspec
+    , base >=4.5 && <5
+    , base-compat
     , ghc-prim
+    , haskell-src-meta >=0.1.0
+    , hspec
+    , parsec
+    , scientific
+    , template-haskell
+    , text
+    , vector

@@ -1,5 +1,5 @@
 name: aeson-qq
-version: 0.8.2
+version: 0.8.3
 synopsis: JSON quasiquoter for Haskell
 description: |
   @aeson-qq@ provides a JSON quasiquoter for Haskell.
@@ -39,7 +39,6 @@ source-dirs: src
 library:
   exposed-modules:
     - Data.Aeson.QQ
-  dependencies:
 
 tests:
   spec:
