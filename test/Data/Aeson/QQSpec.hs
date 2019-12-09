@@ -4,6 +4,7 @@ module Data.Aeson.QQSpec (main, spec) where
 import           Test.Hspec
 
 import           Data.Char
+import           Data.Text (Text)
 import           Data.Aeson
 
 import qualified Person
@@ -40,8 +41,12 @@ spec = do
       [aesonQQ|[null, #{x}]|] `shouldBe` toJSON [Null, x]
 
     it "can interpolate field names" $ do
-      let foo = "zoo"
+      let foo = "zoo" :: String
       [aesonQQ|{$foo: "bar"}|] `shouldBe` object [("zoo", "bar")]
+
+    it "can interpolate text field names" $ do
+      let foo = "too" :: Text
+      [aesonQQ|{$foo: "bar"}|] `shouldBe` object [("too", "bar")]
 
     it "can interpolate numbers" $ do
       let x = 23 :: Int
