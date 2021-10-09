@@ -10,6 +10,7 @@ import Language.Haskell.TH
 import Language.Haskell.TH.Quote
 
 import qualified Data.Vector as V
+import Data.String (fromString)
 import qualified Data.Text as T
 import Data.Aeson
 
@@ -46,8 +47,8 @@ toExp (JsonObject objs) = [|object $jsList|]
       objs2list :: (HashKey, JsonValue) -> ExpQ
       objs2list (key, value) = do
         case key of
-          HashStringKey k -> [|(T.pack k, $(toExp value))|]
-          HashVarKey k -> [|(T.pack $(dyn k), $(toExp value))|]
+          HashStringKey k -> [|(fromString k, $(toExp value))|]
+          HashVarKey k -> [|(fromString $(dyn k), $(toExp value))|]
 toExp (JsonArray arr) = [|Array $ V.fromList $(ListE <$> mapM toExp arr)|]
 toExp (JsonNumber n) = [|Number (fromRational $(return $ LitE $ RationalL (toRational n)))|]
 toExp (JsonBool b) = [|Bool b|]
