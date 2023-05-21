@@ -1,5 +1,2 @@
-# Warnings currently triggered by your code
-- ignore: {name: "Use $>"} # 11 hints
-
 - arguments:
     - --ignore-glob=README.lhs

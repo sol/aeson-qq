@@ -1,7 +1,7 @@
 module Data.JSON.QQ (JsonValue (..), HashKey (..), parsedJson) where
 
 import           Control.Applicative
-import           Data.Functor ((<&>))
+import           Data.Functor ((<&>), ($>))
 import           Language.Haskell.TH
 import           Text.ParserCombinators.Parsec hiding (many, (<|>))
 import           Language.Haskell.Meta.Parse
@@ -40,7 +40,7 @@ jpValue = do
   return res
 
 jpBool :: JsonParser
-jpBool = JsonBool <$> (string "true" *> pure True <|> string "false" *> pure False)
+jpBool = JsonBool <$> ((string "true" $> True) <|> (string "false" $> False))
 
 jpCode :: JsonParser
 jpCode = JsonCode <$> (string "#{" *> parseExp')
@@ -52,7 +52,7 @@ jpCode = JsonCode <$> (string "#{" *> parseExp')
         Right r -> return r
 
 jpNull :: JsonParser
-jpNull = string "null" *> pure JsonNull
+jpNull = string "null" $> JsonNull
 
 jpString :: JsonParser
 jpString = between (char '"') (char '"') (option [""] $ many chars) <&> (JsonString . concat) -- do
@@ -120,14 +120,14 @@ commaSep p  = p `sepBy` char ','
 
 chars :: CharParser () String
 chars = do
-       try (string "\\\"" *> pure "\"")
-   <|> try (string "\\\\" *> pure "\\")
-   <|> try (string "\\/" *> pure "/")
-   <|> try (string "\\b" *> pure "\b")
-   <|> try (string "\\f" *> pure "\f")
-   <|> try (string "\\n" *> pure "\n")
-   <|> try (string "\\r" *> pure "\r")
-   <|> try (string "\\t" *> pure "\t")
+       try (string "\\\"" $> "\"")
+   <|> try (string "\\\\" $> "\\")
+   <|> try (string "\\/" $> "/")
+   <|> try (string "\\b" $> "\b")
+   <|> try (string "\\f" $> "\f")
+   <|> try (string "\\n" $> "\n")
+   <|> try (string "\\r" $> "\r")
+   <|> try (string "\\t" $> "\t")
    <|> try unicodeChars
    <|> many1 (noneOf "\\\"")
 
