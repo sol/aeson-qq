@@ -1,0 +1,4 @@
+packages: aeson-qq.cabal
+
+package aeson-qq
+  ghc-options: -Werror

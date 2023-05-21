@@ -1,5 +1,5 @@
 name: aeson-qq
-version: 0.8.3
+version: 0.8.4
 synopsis: JSON quasiquoter for Haskell
 description: |
   @aeson-qq@ provides a JSON quasiquoter for Haskell.
@@ -42,9 +42,11 @@ library:
 
 tests:
   spec:
+    ghc-options: -fno-warn-incomplete-uni-patterns
+    build-tools: hspec-discover
     main: Spec.hs
     source-dirs:
       - test
     dependencies:
       - hspec
-      - ghc-prim # Neded for GHC 7.4.*
+      - ghc-prim # Needed for GHC 7.4.*

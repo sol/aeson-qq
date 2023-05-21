@@ -1,13 +1,11 @@
 cabal-version: 1.12
 
--- This file has been generated from package.yaml by hpack version 0.32.0.
+-- This file has been generated from package.yaml by hpack version 0.35.2.
 --
 -- see: https://github.com/sol/hpack
---
--- hash: a1f241da60cf8a9d7982813256a1f34533b63be4d8adaeef03e78814369707c4
 
 name:             aeson-qq
-version:          0.8.3
+version:          0.8.4
 synopsis:         JSON quasiquoter for Haskell
 description:      @aeson-qq@ provides a JSON quasiquoter for Haskell.
                   .
@@ -56,7 +54,9 @@ library
 
 test-suite spec
   type: exitcode-stdio-1.0
-  ghc-options: -Wall
+  ghc-options: -Wall -fno-warn-incomplete-uni-patterns
+  build-tool-depends:
+      hspec-discover:hspec-discover
   hs-source-dirs:
       src
       test
