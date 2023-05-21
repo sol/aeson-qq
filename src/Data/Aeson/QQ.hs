@@ -38,11 +38,11 @@ jsonExp txt =
 ---------
 toExp :: QQ.JsonValue -> ExpQ
 toExp (JsonString str) = [|String (T.pack str)|]
-toExp (JsonNull) = [|Null|]
+toExp JsonNull = [|Null|]
 toExp (JsonObject objs) = [|object $jsList|]
     where
       jsList :: ExpQ
-      jsList = ListE <$> mapM objs2list (objs)
+      jsList = ListE <$> mapM objs2list objs
 
       objs2list :: (HashKey, JsonValue) -> ExpQ
       objs2list (key, value) = do

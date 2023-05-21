@@ -46,7 +46,7 @@ jpCode = JsonCode <$> (string "#{" *> parseExp')
   where
     parseExp' = do
       str <- many1 (noneOf "}") <* char '}'
-      case (parseExp str) of
+      case parseExp str of
         Left l -> fail l
         Right r -> return r
 
@@ -115,7 +115,7 @@ symbol :: CharParser () String
 symbol = many1 (noneOf "\\ \":;><${}")
 
 commaSep :: CharParser () a -> CharParser () [a]
-commaSep p  = p `sepBy` (char ',')
+commaSep p  = p `sepBy` char ','
 
 chars :: CharParser () String
 chars = do
@@ -127,7 +127,7 @@ chars = do
    <|> try (string "\\n" *> pure "\n")
    <|> try (string "\\r" *> pure "\r")
    <|> try (string "\\t" *> pure "\t")
-   <|> try (unicodeChars)
+   <|> try unicodeChars
    <|> many1 (noneOf "\\\"")
 
 unicodeChars :: CharParser () String
@@ -137,4 +137,4 @@ unicodeChars = do
   d2 <- hexDigit
   d3 <- hexDigit
   d4 <- hexDigit
-  return $ u ++ [d1] ++ [d2] ++ [d3] ++ [d4]
+  return $ u ++ [d1] ++ [d2] ++ [d3] ++ [d4]
