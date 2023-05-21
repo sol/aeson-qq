@@ -1,0 +1,9 @@
+# Warnings currently triggered by your code
+- ignore: {name: "Redundant $"} # 1 hint
+- ignore: {name: "Redundant bracket"} # 5 hints
+- ignore: {name: "Unused LANGUAGE pragma"} # 1 hint
+- ignore: {name: "Use $>"} # 11 hints
+- ignore: {name: "Use <&>"} # 1 hint
+
+- arguments:
+    - --ignore-glob=README.lhs
