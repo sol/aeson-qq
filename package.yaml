@@ -47,4 +47,6 @@ tests:
       - test
     dependencies:
       - hspec
-      - ghc-prim # Neded for GHC 7.4.*
+      - ghc-prim # Needed for GHC 7.4.*
+    build-tools:
+      - hspec-discover
