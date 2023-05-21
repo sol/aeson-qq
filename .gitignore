@@ -1,5 +1,6 @@
 IDE.session
 dist
+dist-newstyle
 *.swp
 *.hi
 .DS_Store
