@@ -81,7 +81,7 @@ jpNumber = JsonNumber <$> do
 jpObject :: JsonParser
 jpObject = do
   list <- between (char '{') (char '}') (spaces *> commaSep jpHash)
-  return $ JsonObject $ list
+  return $ JsonObject list
   where
     jpHash :: CharParser () (HashKey,JsonValue) -- (String,JsonValue)
     jpHash = do
