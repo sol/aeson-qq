@@ -12,34 +12,30 @@ spec :: Spec
 spec = do
   describe "parsedJson" $ do
     it "parses JSON" $ do
-      parsedJson "{foo: 23}" `shouldSatisfy` either
-        (const False)
-        (== JsonObject [(HashStringKey "foo", JsonNumber 23)])
+      parsedJson "{foo: 23}" `shouldBe` Right (JsonObject [(HashStringKey "foo", JsonNumber 23)])
 
     it "parses decimal numbers" $ do
-      parsedJson "{foo: 5.97}" `shouldSatisfy` either
-        (const False)
-        (== JsonObject [(HashStringKey "foo", JsonNumber 5.97)])
+      parsedJson "{foo: 5.97}" `shouldBe` Right (JsonObject [(HashStringKey "foo", JsonNumber 5.97)])
 
     context "empty objects" $ do
       it "parses empty objects (regression test)" $ do
-        parsedJson "{}" `shouldSatisfy` either (const False) (== JsonObject [])
+        parsedJson "{}" `shouldBe` Right (JsonObject [])
 
       it "parses empty objects that include whitespace (regression test)" $ do
-        parsedJson "{ }" `shouldSatisfy` either (const False) (== JsonObject [])
+        parsedJson "{ }" `shouldBe` Right (JsonObject [])
 
       it "parses empty objects that include newlines (regression test)" $ do
-        parsedJson "{\n}" `shouldSatisfy` either (const False) (== JsonObject [])
+        parsedJson "{\n}" `shouldBe` Right (JsonObject [])
 
     context "empty arrays" $ do
       it "parses empty arrays" $ do
-        parsedJson "[   ]" `shouldSatisfy` either (const False) (== JsonArray [])
+        parsedJson "[   ]" `shouldBe` Right (JsonArray [])
 
       it "parses empty arrays that include whitespace (regression test)" $ do
-        parsedJson "[   ]" `shouldSatisfy` either (const False) (== JsonArray [])
+        parsedJson "[   ]" `shouldBe` Right (JsonArray [])
 
       it "parses empty objects that include newlines (regression test)" $ do
-        parsedJson "[\n]" `shouldSatisfy` either (const False) (== JsonArray [])
+        parsedJson "[\n]" `shouldBe` Right (JsonArray [])
 
     it "fails on excess input" $ do
       parsedJson "{foo: 23} some excess input" `shouldSatisfy` either
