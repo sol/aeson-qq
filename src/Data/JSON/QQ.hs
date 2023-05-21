@@ -1,6 +1,7 @@
 module Data.JSON.QQ (JsonValue (..), HashKey (..), parsedJson) where
 
 import           Control.Applicative
+import           Data.Functor ((<&>))
 import           Language.Haskell.TH
 import           Text.ParserCombinators.Parsec hiding (many, (<|>))
 import           Language.Haskell.Meta.Parse
@@ -54,7 +55,7 @@ jpNull :: JsonParser
 jpNull = string "null" *> pure JsonNull
 
 jpString :: JsonParser
-jpString = between (char '"') (char '"') (option [""] $ many chars) >>= return . JsonString . concat -- do
+jpString = between (char '"') (char '"') (option [""] $ many chars) <&> (JsonString . concat) -- do
 
 jpNumber :: JsonParser
 jpNumber = JsonNumber <$> do
