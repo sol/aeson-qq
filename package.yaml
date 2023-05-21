@@ -42,6 +42,7 @@ library:
 
 tests:
   spec:
+    ghc-options: -fno-warn-incomplete-uni-patterns
     build-tools: hspec-discover
     main: Spec.hs
     source-dirs:
