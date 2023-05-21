@@ -1,13 +1,24 @@
+{-# LANGUAGE CPP #-}
 module Data.JSON.QQ (JsonValue (..), HashKey (..), parsedJson) where
 
 import           Control.Applicative
-import           Data.Functor ((<&>), ($>))
 import           Language.Haskell.TH
 import           Text.ParserCombinators.Parsec hiding (many, (<|>))
 import           Language.Haskell.Meta.Parse
 import qualified Data.Attoparsec.Text as A
 import           Data.Scientific (Scientific)
 import qualified Data.Text as T
+
+#if MIN_VERSION_base(4,11,0)
+import           Data.Functor ((<&>), ($>))
+#else
+import           Data.Functor (($>))
+
+(<&>) :: Functor f => f a -> (a -> b) -> f b
+(<&>) = flip fmap
+
+infixl 1 <&>
+#endif
 
 parsedJson :: String -> Either ParseError JsonValue
 parsedJson = parse (jpValue <* eof) "txt"
