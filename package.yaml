@@ -50,3 +50,4 @@ tests:
     dependencies:
       - hspec
       - ghc-prim # Needed for GHC 7.4.*
+      - parsec >= 3.1.9

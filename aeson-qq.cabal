@@ -77,7 +77,7 @@ test-suite spec
     , ghc-prim
     , haskell-src-meta >=0.1.0
     , hspec
-    , parsec
+    , parsec >=3.1.9
     , scientific
     , template-haskell
     , text
