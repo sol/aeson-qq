@@ -1,3 +1,4 @@
+{-# LANGUAGE CPP #-}
 module Data.JSON.QQ (JsonValue (..), HashKey (..), parsedJson) where
 
 import           Control.Applicative
@@ -7,6 +8,17 @@ import           Language.Haskell.Meta.Parse
 import qualified Data.Attoparsec.Text as A
 import           Data.Scientific (Scientific)
 import qualified Data.Text as T
+
+#if MIN_VERSION_base(4,11,0)
+import           Data.Functor ((<&>), ($>))
+#else
+import           Data.Functor (($>))
+
+(<&>) :: Functor f => f a -> (a -> b) -> f b
+(<&>) = flip fmap
+
+infixl 1 <&>
+#endif
 
 parsedJson :: String -> Either ParseError JsonValue
 parsedJson = parse (jpValue <* eof) "txt"
@@ -39,22 +51,22 @@ jpValue = do
   return res
 
 jpBool :: JsonParser
-jpBool = JsonBool <$> (string "true" *> pure True <|> string "false" *> pure False)
+jpBool = JsonBool <$> ((string "true" $> True) <|> (string "false" $> False))
 
 jpCode :: JsonParser
 jpCode = JsonCode <$> (string "#{" *> parseExp')
   where
     parseExp' = do
       str <- many1 (noneOf "}") <* char '}'
-      case (parseExp str) of
+      case parseExp str of
         Left l -> fail l
         Right r -> return r
 
 jpNull :: JsonParser
-jpNull = string "null" *> pure JsonNull
+jpNull = string "null" $> JsonNull
 
 jpString :: JsonParser
-jpString = between (char '"') (char '"') (option [""] $ many chars) >>= return . JsonString . concat -- do
+jpString = between (char '"') (char '"') (option [""] $ many chars) <&> (JsonString . concat) -- do
 
 jpNumber :: JsonParser
 jpNumber = JsonNumber <$> do
@@ -81,7 +93,7 @@ jpNumber = JsonNumber <$> do
 jpObject :: JsonParser
 jpObject = do
   list <- between (char '{') (char '}') (spaces *> commaSep jpHash)
-  return $ JsonObject $ list
+  return $ JsonObject list
   where
     jpHash :: CharParser () (HashKey,JsonValue) -- (String,JsonValue)
     jpHash = do
@@ -115,19 +127,19 @@ symbol :: CharParser () String
 symbol = many1 (noneOf "\\ \":;><${}")
 
 commaSep :: CharParser () a -> CharParser () [a]
-commaSep p  = p `sepBy` (char ',')
+commaSep p  = p `sepBy` char ','
 
 chars :: CharParser () String
 chars = do
-       try (string "\\\"" *> pure "\"")
-   <|> try (string "\\\\" *> pure "\\")
-   <|> try (string "\\/" *> pure "/")
-   <|> try (string "\\b" *> pure "\b")
-   <|> try (string "\\f" *> pure "\f")
-   <|> try (string "\\n" *> pure "\n")
-   <|> try (string "\\r" *> pure "\r")
-   <|> try (string "\\t" *> pure "\t")
-   <|> try (unicodeChars)
+       try (string "\\\"" $> "\"")
+   <|> try (string "\\\\" $> "\\")
+   <|> try (string "\\/" $> "/")
+   <|> try (string "\\b" $> "\b")
+   <|> try (string "\\f" $> "\f")
+   <|> try (string "\\n" $> "\n")
+   <|> try (string "\\r" $> "\r")
+   <|> try (string "\\t" $> "\t")
+   <|> try unicodeChars
    <|> many1 (noneOf "\\\"")
 
 unicodeChars :: CharParser () String
@@ -137,4 +149,4 @@ unicodeChars = do
   d2 <- hexDigit
   d3 <- hexDigit
   d4 <- hexDigit
-  return $ u ++ [d1] ++ [d2] ++ [d3] ++ [d4]
+  return $ u ++ [d1] ++ [d2] ++ [d3] ++ [d4]
