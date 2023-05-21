@@ -38,5 +38,5 @@ spec = do
         parsedJson "[\n]" `shouldBe` Right (JsonArray [])
 
     it "fails on excess input" $ do
-        let Left err = parsedJson "{foo: 23} some excess input"
-        show err `shouldBe` "\"txt\" (line 1, column 11):\nunexpected 's'\nexpecting space or end of input"
+      let Left err = parsedJson "{foo: 23} some excess input"
+      show err `shouldBe` "\"txt\" (line 1, column 11):\nunexpected 's'\nexpecting space or end of input"
